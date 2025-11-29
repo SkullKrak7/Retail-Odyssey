@@ -1,1 +1,2 @@
-# PIP Requirements: Python library list for multiplatform development
+openai==2.8.1
+python-dotenv==1.2.1

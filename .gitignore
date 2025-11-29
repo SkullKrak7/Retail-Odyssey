@@ -1,1 +1,3 @@
 # Gitignore: Exclude large datasets, models, secrets, and virtualenvs
+venv/
+__pycache__/
