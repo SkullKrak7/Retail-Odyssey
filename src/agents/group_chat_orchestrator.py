@@ -6,6 +6,7 @@ from .vision_agent import analyze_wardrobe
 from .recommendation_agent import recommend_outfit
 from .intent_agent import parse_intent
 from .conversation_agent import generate_response
+from .imagegen_agent import generate_outfit_image
 from ..utils.prometheus_metrics import agent_calls, total_requests, response_time
 
 class Message:
@@ -42,6 +43,8 @@ class GroupChatOrchestrator:
             agents.append("VisionAgent")
         if "recommend" in msg_lower or "suggest" in msg_lower or "wear" in msg_lower:
             agents.append("RecommendationAgent")
+        if any(word in msg_lower for word in ["generate", "create", "show", "visualize", "visual"]):
+            agents.append("ImageGenAgent")
         if not agents:
             agents.append("ConversationAgent")
         
@@ -67,6 +70,10 @@ class GroupChatOrchestrator:
         elif agent_name == "RecommendationAgent":
             response = await recommend_outfit(message, self.wardrobe_context)
             result = response + context_note
+        elif agent_name == "ImageGenAgent":
+            outfit_desc = self.wardrobe_context or message
+            image_url = await generate_outfit_image(outfit_desc)
+            result = f"IMAGE_URL:{image_url}"
         elif agent_name == "ConversationAgent":
             result = await generate_response(history, message)
         else:

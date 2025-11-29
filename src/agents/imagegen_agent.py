@@ -1,27 +1,33 @@
 import os
-from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
-load_dotenv()
-key = os.getenv("OPENAI_API_KEY")
-if key:
-    os.environ["OPENAI_API_KEY"] = key
+_client = None
 
 def get_client():
-    return AsyncOpenAI(api_key=key)
+    global _client
+    if _client is None:
+        api_key = os.getenv("OPENAI_API_KEY")
+        if api_key:
+            _client = AsyncOpenAI(api_key=api_key)
+    return _client
 
-async def generate_outfit_visualization(outfit_description: str) -> str:
-    if not key:
-        return f"ImageGenAgent: Outfit visualization concept ready for {outfit_description} (demo mode)"
+async def generate_outfit_image(description: str) -> str:
+    client = get_client()
+    
+    if not client:
+        return "demo_mode:Image generation requires OpenAI API key"
+    
     try:
-        client = get_client()
+        prompt = f"Professional fashion photography: {description}. Studio lighting, neutral background, high quality, detailed."
+        
         response = await client.images.generate(
             model="dall-e-3",
-            prompt=f"Fashion outfit visualization: {outfit_description}. Professional fashion photography style.",
+            prompt=prompt,
             size="1024x1024",
             quality="standard",
-            n=1,
+            n=1
         )
+        
         return response.data[0].url
     except Exception as e:
-        return f"ImageGenAgent: Visualization ready (error: {str(e)[:50]})"
+        return f"demo_mode:Error generating image: {str(e)}"

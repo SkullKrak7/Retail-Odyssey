@@ -31,8 +31,24 @@ class ChatRequest(BaseModel):
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
     responses = await orchestrator.process_message(request.message, request.image_url)
+    formatted_responses = []
+    
+    for r in responses:
+        response_data = {
+            "agent": r.sender,
+            "message": r.content,
+            "time": r.timestamp.isoformat()
+        }
+        
+        if r.content.startswith("IMAGE_URL:"):
+            image_url = r.content.replace("IMAGE_URL:", "")
+            response_data["image_url"] = image_url
+            response_data["message"] = "Generated outfit visualization"
+        
+        formatted_responses.append(response_data)
+    
     return {
-        "responses": [{"agent": r.sender, "message": r.content, "time": r.timestamp.isoformat()} for r in responses],
+        "responses": formatted_responses,
         "conversation": orchestrator.get_conversation_history()
     }
 
@@ -42,7 +58,7 @@ async def get_history():
 
 @app.get("/api/health")
 async def health():
-    return {"status": "healthy", "agents": ["VisionAgent", "RecommendationAgent", "ConversationAgent"]}
+    return {"status": "healthy", "agents": ["VisionAgent", "RecommendationAgent", "ConversationAgent", "ImageGenAgent"]}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
