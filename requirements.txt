@@ -1,1 +1,1 @@
-# PIP Requirements: Python library list for multiplatform development
+google-generativeai
