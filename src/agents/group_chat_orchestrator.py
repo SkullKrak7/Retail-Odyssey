@@ -59,25 +59,19 @@ class GroupChatOrchestrator:
         agent_calls.labels(agent_name=agent_name).inc()
         
         history = [{"role": m.sender, "content": m.content} for m in self.messages[-5:]]
-        context_note = ""
-        
-        if len(self.messages) > 1:
-            other_agents = [m.sender for m in self.messages[-3:] if m.sender not in ["User", agent_name]]
-            if other_agents:
-                context_note = f" (Building on insights from {', '.join(set(other_agents))})"
         
         result = ""
         if agent_name == "VisionAgent" and image_url:
             response = await analyze_wardrobe(image_url, message)
             self.wardrobe_context = response
-            result = response + context_note
+            result = response
         elif agent_name == "RecommendationAgent":
             response = await recommend_outfit(message, self.wardrobe_context)
-            result = response + context_note
+            result = response
         elif agent_name == "ImageGenAgent":
             outfit_desc = self.wardrobe_context or message
-            image_url = await generate_outfit_image(outfit_desc)
-            result = f"IMAGE_URL:{image_url}"
+            image_data = await generate_outfit_image(outfit_desc)
+            result = f"IMAGE_URL:{image_data}"
         elif agent_name == "ConversationAgent":
             result = await generate_response(history, message)
         else:

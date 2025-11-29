@@ -24,7 +24,7 @@ async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str
                 "role": "user",
                 "content": f"Request: {user_request}\nWardrobe: {wardrobe_context}\nSuggest an outfit."
             }],
-            max_tokens=200
+            max_tokens=400
         )
         return response.choices[0].message.content
     except Exception as e:
