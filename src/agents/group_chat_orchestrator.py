@@ -33,8 +33,6 @@ class GroupChatOrchestrator:
             responses.append(msg)
         
         return responses
-        
-        return responses
     
     def _identify_relevant_agents(self, message: str, has_image: bool) -> List[str]:
         agents = []
@@ -45,9 +43,6 @@ class GroupChatOrchestrator:
         if "recommend" in msg_lower or "suggest" in msg_lower or "wear" in msg_lower:
             agents.append("RecommendationAgent")
         if not agents:
-            agents.append("ConversationAgent")
-        
-        return agents
             agents.append("ConversationAgent")
         
         return agents
