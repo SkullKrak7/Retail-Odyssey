@@ -1,11 +1,17 @@
 import os
+from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
+load_dotenv()
+key = os.getenv("OPENAI_API_KEY")
+if key:
+    os.environ["OPENAI_API_KEY"] = key
+
 def get_client():
-    return AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
+    return AsyncOpenAI(api_key=key)
 
 async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str:
-    if not os.getenv("OPENAI_API_KEY"):
+    if not key:
         return "RecommendationAgent: Try pairing a blazer with dark jeans and boots (demo mode)"
     try:
         client = get_client()
@@ -22,4 +28,4 @@ async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str
         )
         return response.choices[0].message.content
     except Exception as e:
-        return "RecommendationAgent: Try pairing a blazer with dark jeans and boots (demo mode)"
+        return f"RecommendationAgent: Try pairing a blazer with dark jeans (error: {str(e)[:50]})"

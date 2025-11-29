@@ -1,11 +1,17 @@
 import os
+from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
+load_dotenv()
+key = os.getenv("OPENAI_API_KEY")
+if key:
+    os.environ["OPENAI_API_KEY"] = key
+
 def get_client():
-    return AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
+    return AsyncOpenAI(api_key=key)
 
 async def parse_intent(user_message: str) -> dict:
-    if not os.getenv("OPENAI_API_KEY"):
+    if not key:
         return {"intent": "casual_outfit", "occasion": "general", "raw": user_message}
     try:
         client = get_client()
@@ -22,4 +28,4 @@ async def parse_intent(user_message: str) -> dict:
         )
         return {"intent": response.choices[0].message.content, "raw": user_message}
     except Exception as e:
-        return {"intent": "casual_outfit", "occasion": "general", "raw": user_message}
+        return {"intent": "casual_outfit", "occasion": "general", "raw": user_message, "error": str(e)[:50]}

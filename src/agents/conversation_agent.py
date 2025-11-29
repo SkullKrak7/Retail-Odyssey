@@ -1,11 +1,17 @@
 import os
+from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
+load_dotenv()
+key = os.getenv("OPENAI_API_KEY")
+if key:
+    os.environ["OPENAI_API_KEY"] = key
+
 def get_client():
-    return AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
+    return AsyncOpenAI(api_key=key)
 
 async def generate_response(conversation_history: list, user_message: str) -> str:
-    if not os.getenv("OPENAI_API_KEY"):
+    if not key:
         return "ConversationAgent: How can I help with your outfit today? (demo mode)"
     try:
         client = get_client()
@@ -20,4 +26,4 @@ async def generate_response(conversation_history: list, user_message: str) -> st
         )
         return response.choices[0].message.content
     except Exception as e:
-        return "ConversationAgent: How can I help with your outfit today? (demo mode)"
+        return f"ConversationAgent: How can I help? (error: {str(e)[:50]})"
