@@ -1,5 +1,5 @@
 #!/bin/bash
 
-export HF_TOKEN="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"
+export HF_TOKEN=""
 export TOGETHER_API_KEY=""
-export GOOGLE_API_KEY="AIzaSyBnpPZEYm0ZRe_-mVDQtX-x4qMnn0NBMZA"
+export GOOGLE_API_KEY=""
