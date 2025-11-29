@@ -1,12 +1,14 @@
 import os
 from openai import AsyncOpenAI
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
+def get_client():
+    return AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
 
 async def analyze_wardrobe(image_url: str, context: str = "") -> str:
     if not os.getenv("OPENAI_API_KEY"):
         return "VisionAgent: Found casual shirts, jeans, jackets in wardrobe (demo mode)"
     try:
+        client = get_client()
         response = await client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{

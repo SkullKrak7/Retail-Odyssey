@@ -1,12 +1,14 @@
 import os
 from openai import AsyncOpenAI
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
+def get_client():
+    return AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
 
 async def generate_response(conversation_history: list, user_message: str) -> str:
     if not os.getenv("OPENAI_API_KEY"):
         return "ConversationAgent: How can I help with your outfit today? (demo mode)"
     try:
+        client = get_client()
         messages = [{"role": "system", "content": "You are a fashion assistant in a group chat with other AI agents."}]
         messages.extend(conversation_history[-5:])
         messages.append({"role": "user", "content": user_message})

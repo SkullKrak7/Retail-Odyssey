@@ -1,12 +1,14 @@
 import os
 from openai import AsyncOpenAI
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
+def get_client():
+    return AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
 
 async def parse_intent(user_message: str) -> dict:
     if not os.getenv("OPENAI_API_KEY"):
         return {"intent": "casual_outfit", "occasion": "general", "raw": user_message}
     try:
+        client = get_client()
         response = await client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{
