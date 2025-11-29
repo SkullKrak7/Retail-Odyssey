@@ -32,14 +32,11 @@ CRITICAL REQUIREMENTS:
 - 3:4 portrait orientation"""
         
         response = client.models.generate_content(
-            model="gemini-3-pro-image-preview",
+            model="gemini-1.5-pro",
             contents=[prompt],
             config=types.GenerateContentConfig(
-                response_modalities=['IMAGE'],
-                image_config=types.ImageConfig(
-                    aspect_ratio="3:4",
-                    image_size="2K"
-                )
+                response_modalities=['TEXT', 'IMAGE'],
+                temperature=0.7
             )
         )
         
