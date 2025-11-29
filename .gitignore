@@ -1,1 +1,23 @@
-# Gitignore: Exclude large datasets, models, secrets, and virtualenvs
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.env
+.venv
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.pytest_cache/
+.coverage
+htmlcov/
