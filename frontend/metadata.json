@@ -1,0 +1,7 @@
+{
+  "name": "StyleSense AI",
+  "description": "An AI-powered personal stylist that reduces choice fatigue by analyzing your wardrobe and creating tailored outfits for any event.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

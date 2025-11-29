@@ -11,16 +11,15 @@ services:
       - ./.env:/app/.env
     restart: unless-stopped
 
-  streamlit:
-    build: .
-    command: streamlit run frontend/streamlit_ui/app.py --server.port=8501 --server.address=0.0.0.0
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "8501:8501"
+      - "5173:5173"
     environment:
-      - API_URL=http://api:8000
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-    depends_on:
-      - api
+      - VITE_API_URL=http://localhost:8000
+      - VITE_GEMINI_API_KEY=${GEMINI_API_KEY}
     restart: unless-stopped
 
   grafana:
