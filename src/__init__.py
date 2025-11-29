@@ -1,1 +1,1 @@
-# src init: Package file for src directory; allows relative imports
+__version__ = "1.0.0"
