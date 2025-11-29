@@ -1,9 +1,11 @@
 import os
 from openai import AsyncOpenAI
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
 
 async def analyze_wardrobe(image_url: str, context: str = "") -> str:
+    if not os.getenv("OPENAI_API_KEY"):
+        return "VisionAgent: Found casual shirts, jeans, jackets in wardrobe (demo mode)"
     try:
         response = await client.chat.completions.create(
             model="gpt-4o-mini",
@@ -18,4 +20,4 @@ async def analyze_wardrobe(image_url: str, context: str = "") -> str:
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"VisionAgent: Found casual shirts, jeans, jackets in wardrobe"
+        return "VisionAgent: Found casual shirts, jeans, jackets in wardrobe (demo mode)"

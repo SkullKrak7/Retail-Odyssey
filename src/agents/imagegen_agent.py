@@ -1,9 +1,11 @@
 import os
 from openai import AsyncOpenAI
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
 
 async def generate_outfit_visualization(outfit_description: str) -> str:
+    if not os.getenv("OPENAI_API_KEY"):
+        return f"ImageGenAgent: Outfit visualization concept ready for {outfit_description} (demo mode)"
     try:
         response = await client.images.generate(
             model="dall-e-3",
@@ -14,4 +16,4 @@ async def generate_outfit_visualization(outfit_description: str) -> str:
         )
         return response.data[0].url
     except Exception as e:
-        return f"ImageGenAgent: Outfit visualization concept ready for {outfit_description}"
+        return f"ImageGenAgent: Outfit visualization concept ready for {outfit_description} (demo mode)"

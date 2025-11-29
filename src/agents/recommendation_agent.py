@@ -1,9 +1,11 @@
 import os
 from openai import AsyncOpenAI
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY", "dummy-key"))
 
 async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str:
+    if not os.getenv("OPENAI_API_KEY"):
+        return "RecommendationAgent: Try pairing a blazer with dark jeans and boots (demo mode)"
     try:
         response = await client.chat.completions.create(
             model="gpt-4o-mini",
@@ -18,4 +20,4 @@ async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str
         )
         return response.choices[0].message.content
     except Exception as e:
-        return "RecommendationAgent: Try pairing a blazer with dark jeans and boots"
+        return "RecommendationAgent: Try pairing a blazer with dark jeans and boots (demo mode)"
