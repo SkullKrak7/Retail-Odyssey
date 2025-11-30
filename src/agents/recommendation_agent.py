@@ -47,19 +47,25 @@ async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str
                 max_output_tokens=512,
             )
             
-            prompt = f"""Search for REAL products on Frasers Group websites and recommend them:
+            prompt = f"""You are a fashion stylist for Frasers Group. ONLY recommend products available on these Frasers websites:
 
-Sites to search:
-- sportsdirect.com (activewear, casual)
-- houseoffraser.co.uk (premium fashion)
-- flannels.com (designer brands)
-- usc.co.uk (streetwear)
-- jackwills.com (British style)
+SEARCH ONLY THESE SITES:
+- site:sportsdirect.com
+- site:houseoffraser.co.uk
+- site:flannels.com
+- site:usc.co.uk
+- site:jackwills.com
 
-User: {user_request}
+User request: {user_request}
 Wardrobe: {wardrobe_context if wardrobe_context else "None"}
 
-Find 2-3 real products with prices and brands. Be specific."""
+IMPORTANT RULES:
+1. Search ONLY the Frasers sites listed above
+2. If a product doesn't exist on Frasers sites, suggest the closest alternative that DOES exist
+3. Recommend 2-3 real products with prices
+4. If you can't find exact items, say "Frasers Group offers similar items like..." and suggest alternatives
+
+Keep response under 150 words."""
             
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
@@ -69,12 +75,22 @@ Find 2-3 real products with prices and brands. Be specific."""
             
             text = response.text
             
-            # Add inline citations from grounding metadata
+            # Check if grounding found Frasers products
+            has_frasers_links = False
             if response.candidates and response.candidates[0].grounding_metadata:
                 metadata = response.candidates[0].grounding_metadata
                 
-                if hasattr(metadata, 'grounding_supports') and metadata.grounding_supports:
-                    chunks = metadata.grounding_chunks if hasattr(metadata, 'grounding_chunks') else []
+                if hasattr(metadata, 'grounding_chunks') and metadata.grounding_chunks:
+                    # Check if any links are from Frasers domains
+                    frasers_domains = ['sportsdirect.com', 'houseoffraser.co.uk', 'flannels.com', 'usc.co.uk', 'jackwills.com']
+                    for chunk in metadata.grounding_chunks:
+                        if hasattr(chunk, 'web') and chunk.web and hasattr(chunk.web, 'uri'):
+                            if any(domain in chunk.web.uri for domain in frasers_domains):
+                                has_frasers_links = True
+                                break
+                
+                if has_frasers_links and hasattr(metadata, 'grounding_supports') and metadata.grounding_supports:
+                    chunks = metadata.grounding_chunks
                     
                     # Sort by end_index descending to avoid shifting
                     sorted_supports = sorted(
@@ -90,11 +106,17 @@ Find 2-3 real products with prices and brands. Be specific."""
                             for i in support.grounding_chunk_indices:
                                 if i < len(chunks) and hasattr(chunks[i], 'web'):
                                     uri = chunks[i].web.uri
-                                    citation_links.append(f"[🔗]({uri})")
+                                    # Only add Frasers links
+                                    if any(domain in uri for domain in frasers_domains):
+                                        citation_links.append(f"[🔗]({uri})")
                             
                             if citation_links:
                                 citation_string = " " + " ".join(citation_links)
                                 text = text[:end_index] + citation_string + text[end_index:]
+            
+            # If no Frasers products found, add disclaimer
+            if not has_frasers_links:
+                text += "\n\n*Note: Visit Frasers Group stores (Sports Direct, House of Fraser, Flannels, USC, Jack Wills) to find similar items.*"
             
             return text
             
