@@ -1,5 +1,5 @@
 {
-  "title": "Retail Odyssey - AI Agents",
+  "title": "Retail Odyssey - AI Agents & Business Metrics",
   "uid": "retail-odyssey-agents",
   "timezone": "browser",
   "schemaVersion": 16,
@@ -10,74 +10,85 @@
       "id": 1,
       "title": "Total Requests",
       "type": "stat",
-      "targets": [
-        {
-          "expr": "retail_odyssey_total_requests_total",
-          "refId": "A"
-        }
-      ],
-      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0},
-      "fieldConfig": {
-        "defaults": {
-          "color": {"mode": "thresholds"},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {"value": null, "color": "green"},
-              {"value": 50, "color": "yellow"},
-              {"value": 100, "color": "red"}
-            ]
-          }
-        }
-      }
+      "targets": [{"expr": "retail_odyssey_total_requests_total", "refId": "A"}],
+      "gridPos": {"h": 6, "w": 4, "x": 0, "y": 0},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"value": null, "color": "green"}, {"value": 50, "color": "yellow"}, {"value": 100, "color": "red"}]}}}
     },
     {
       "id": 2,
-      "title": "Agent Calls by Agent",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "retail_odyssey_agent_calls_total",
-          "legendFormat": "{{agent_name}}",
-          "refId": "A"
-        }
-      ],
-      "gridPos": {"h": 8, "w": 18, "x": 6, "y": 0}
+      "title": "User Sessions",
+      "type": "stat",
+      "targets": [{"expr": "retail_odyssey_user_sessions_total", "refId": "A"}],
+      "gridPos": {"h": 6, "w": 4, "x": 4, "y": 0},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"value": null, "color": "blue"}]}}}
     },
     {
       "id": 3,
-      "title": "Agent Response Time (avg seconds)",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "rate(retail_odyssey_response_time_sum[1m]) / rate(retail_odyssey_response_time_count[1m])",
-          "legendFormat": "{{agent_name}}",
-          "refId": "A"
-        }
-      ],
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
-      "fieldConfig": {
-        "defaults": {
-          "unit": "s"
-        }
-      }
+      "title": "Product Recommendations",
+      "type": "stat",
+      "targets": [{"expr": "retail_odyssey_product_recommendations_total", "refId": "A"}],
+      "gridPos": {"h": 6, "w": 4, "x": 8, "y": 0},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"value": null, "color": "purple"}]}}}
     },
     {
       "id": 4,
+      "title": "Competitor Blocks",
+      "type": "stat",
+      "targets": [{"expr": "retail_odyssey_competitor_blocks_total", "refId": "A"}],
+      "gridPos": {"h": 6, "w": 4, "x": 12, "y": 0},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"value": null, "color": "red"}]}}}
+    },
+    {
+      "id": 5,
+      "title": "Avg Outfit Price (£)",
+      "type": "stat",
+      "targets": [{"expr": "retail_odyssey_avg_outfit_price", "refId": "A"}],
+      "gridPos": {"h": 6, "w": 4, "x": 16, "y": 0},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"value": null, "color": "green"}]}, "unit": "currencyGBP"}}
+    },
+    {
+      "id": 6,
+      "title": "Agent Calls by Agent",
+      "type": "timeseries",
+      "targets": [{"expr": "retail_odyssey_agent_calls_total", "legendFormat": "{{agent_name}}", "refId": "A"}],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6}
+    },
+    {
+      "id": 7,
+      "title": "Brand Mentions",
+      "type": "timeseries",
+      "targets": [{"expr": "retail_odyssey_brand_mentions_total", "legendFormat": "{{brand_name}}", "refId": "A"}],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6}
+    },
+    {
+      "id": 8,
+      "title": "Agent Response Time (avg seconds)",
+      "type": "timeseries",
+      "targets": [{"expr": "rate(retail_odyssey_response_time_sum[1m]) / rate(retail_odyssey_response_time_count[1m])", "legendFormat": "{{agent_name}}", "refId": "A"}],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
+      "fieldConfig": {"defaults": {"unit": "s"}}
+    },
+    {
+      "id": 9,
       "title": "Requests Per Minute",
       "type": "timeseries",
-      "targets": [
-        {
-          "expr": "rate(retail_odyssey_total_requests_total[1m]) * 60",
-          "legendFormat": "Requests/min",
-          "refId": "A"
-        }
-      ],
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      "targets": [{"expr": "rate(retail_odyssey_total_requests_total[1m]) * 60", "legendFormat": "Requests/min", "refId": "A"}],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 14}
+    },
+    {
+      "id": 10,
+      "title": "Messages Per Session Distribution",
+      "type": "timeseries",
+      "targets": [{"expr": "rate(retail_odyssey_messages_per_session_sum[1m]) / rate(retail_odyssey_messages_per_session_count[1m])", "legendFormat": "Avg Messages", "refId": "A"}],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 22}
+    },
+    {
+      "id": 11,
+      "title": "Product Recommendations Rate",
+      "type": "timeseries",
+      "targets": [{"expr": "rate(retail_odyssey_product_recommendations_total[1m]) * 60", "legendFormat": "Products/min", "refId": "A"}],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 22}
     }
   ],
-  "time": {
-    "from": "now-15m",
-    "to": "now"
-  }
+  "time": {"from": "now-15m", "to": "now"}
 }
