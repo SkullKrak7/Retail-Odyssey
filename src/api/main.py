@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 import uvicorn
 from dotenv import load_dotenv
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 from .routers import router as metrics_router
 
 load_dotenv()
@@ -30,28 +31,10 @@ class ChatRequest(BaseModel):
 
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
-    responses = await orchestrator.process_message(request.message, request.image_url)
-    formatted_responses = []
-    
-    for r in responses:
-        response_data = {
-            "agent": r.sender,
-            "message": r.content,
-            "time": r.timestamp.isoformat()
-        }
-        
-        if r.content.startswith("IMAGE_URL:"):
-            image_data = r.content.replace("IMAGE_URL:", "")
-            if not image_data.startswith("demo_mode"):
-                response_data["image_base64"] = image_data
-                response_data["message"] = "Generated outfit visualization"
-            else:
-                response_data["message"] = image_data
-        
-        formatted_responses.append(response_data)
+    agent_conversation = await orchestrator.process_message(request.message, request.image_url)
     
     return {
-        "responses": formatted_responses,
+        "responses": agent_conversation,
         "conversation": orchestrator.get_conversation_history()
     }
 
@@ -59,9 +42,19 @@ async def chat(request: ChatRequest):
 async def get_history():
     return {"conversation": orchestrator.get_conversation_history()}
 
+@app.post("/api/clear")
+async def clear_history():
+    orchestrator.clear_history()
+    return {"status": "cleared"}
+
 @app.get("/api/health")
 async def health():
-    return {"status": "healthy", "agents": ["VisionAgent", "RecommendationAgent", "ConversationAgent", "ImageGenAgent"]}
+    return {"status": "healthy", "agents": ["IntentAgent", "VisionAgent", "RecommendationAgent", "ConversationAgent", "ImageGenAgent"]}
+
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint for Grafana"""
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

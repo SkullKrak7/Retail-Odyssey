@@ -1,124 +1,109 @@
-# RetailOdyssey
+# Retail Odyssey 🧭
 
-Multi-agent fashion recommendation system for HackSheffield10.
+**Your AI-Powered Style Journey**
 
-## Challenge Alignment
+A multi-agent AI system that guides users through their daily fashion odyssey - from morning classes to evening events, helping them navigate outfit transitions across different social contexts.
 
-### Reply AI Agents Challenge
-- Multi-agent group conversation with 5 specialized agents
-- Agents collaborate and reference each other's insights
-- Targeted intent recognition routes queries to relevant agents
-- Context management across conversation history
-- Asynchronous agent coordination
+## The Journey Concept
 
-### Frasers Group Challenge
-- Next-gen retail engagement through AI fashion assistance
-- Personalized outfit recommendations
-- Wardrobe image analysis with GPT-4 Vision
-- Interactive chat interface for modern consumers
+Life is a journey with multiple destinations. Retail Odyssey recognizes that your style needs evolve throughout the day:
+- 📚 Classes → 🍺 Pub → 🎬 Movie → 🎉 Nightclub
+- 💼 Work → 🍽️ Dinner → 🎭 Theater
+- ⚽ Gym → ☕ Coffee → 📅 Date
 
-### Grafana Challenge
-- Real-time metrics collection and monitoring
-- Prometheus metrics exporter
-- Pre-configured Grafana dashboard
-- Agent performance tracking
+Our 5 specialized AI agents collaborate to guide you through every transition.
 
-### Theme: Odyssey
-- Fashion journey metaphor guiding users through style discovery
-- Multi-agent collaboration represents exploration and discovery
-- RetailOdyssey brand identity
+## Multi-Agent Architecture
 
-## Features
+### 1. **IntentAgent** 🎯
+Classifies user intent and determines which agents to activate
 
-- Multi-agent AI collaboration
-- Fashion outfit recommendations
-- Wardrobe image analysis
-- Group chat interface
-- Real-time metrics and monitoring
+### 2. **VisionAgent** 👁️
+Analyzes uploaded wardrobe images to understand what you already own
 
-## Architecture
+### 3. **RecommendationAgent** 👔
+Suggests outfits based on your journey, context, and wardrobe
 
-### AI Agents
-- VisionAgent: Analyzes wardrobe images using GPT-4 Vision
-- RecommendationAgent: Suggests outfits based on context
-- IntentAgent: Parses user requests
-- ConversationAgent: Manages dialogue flow
-- ImageGenAgent: Generates outfit visualizations
-- GroupChatOrchestrator: Coordinates multi-agent collaboration
+### 4. **ConversationAgent** 💬
+Maintains natural dialogue and asks clarifying questions
 
-### Tech Stack
-- Backend: FastAPI (Python 3.11+)
-- Frontend: Streamlit
-- AI: OpenAI GPT-4o-mini
-- Monitoring: Grafana + Prometheus
-- Deployment: Docker + Docker Compose
-- License: MIT
+### 5. **ImageGenAgent** 🎨
+Visualizes outfit recommendations using AI image generation
+
+## Key Features
+
+✅ **Context-Aware Recommendations**: Understands multi-destination journeys  
+✅ **Real-Time Collaboration**: Agents share context and build on each other's insights  
+✅ **Visual Feedback**: Generate outfit visualizations  
+✅ **Wardrobe Analysis**: Upload images of your clothes for personalized advice  
+✅ **Grafana Monitoring**: Real-time metrics on agent performance  
+
+## Tech Stack
+
+- **Backend**: FastAPI + Python
+- **AI**: Google Gemini 2.0 (free tier) + OpenAI (fallback)
+- **Frontend**: React + TypeScript + Vite
+- **Monitoring**: Prometheus + Grafana
+- **Deployment**: Docker (ARM-optimized for Apple Silicon)
 
 ## Quick Start
 
-### Prerequisites
-- Python 3.11+
-- Docker (optional, for containerized deployment)
-- OpenAI API key
-
-### Option 1: Docker (Recommended)
 ```bash
-# 1. Clone repository
-git clone https://github.com/SkullKrak7/HackSheff10.git
-cd HackSheff10
-
-# 2. Set up environment
-cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
-
-# 3. Start all services
+# Start all services
 docker-compose up -d
 
-# 4. Access applications
-# - Streamlit UI: http://localhost:8501
-# - API Docs: http://localhost:8000/docs
-# - Grafana: http://localhost:3000
+# Access
+Frontend: http://localhost:5173
+Backend: http://localhost:8000
+Grafana: http://localhost:3000 (admin/admin)
 ```
 
-### Option 2: Local Development
-```bash
-# 1. Clone repository
-git clone https://github.com/SkullKrak7/HackSheff10.git
-cd HackSheff10
+## Hackathon Challenges Addressed
 
-# 2. Install dependencies
-pip install -r requirements.txt
+### 🏆 Reply AI Agents Challenge
+- ✅ Multi-agent group conversation design
+- ✅ Targeted intent recognition
+- ✅ Context management & attribution
+- ✅ Asynchronous interaction & collaboration
 
-# 3. Set up environment
-cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
+### 🏆 Frasers Group Challenge
+- ✅ Next-gen retail engagement
+- ✅ Attracts Gen-Z with AI-powered personalization
+- ✅ Solves real problem: outfit transitions across contexts
 
-# 4. Start API (Terminal 1)
-python -m src.api.main
+### 🏆 Grafana Challenge
+- ✅ Real-time monitoring of agent performance
+- ✅ Metrics on response times, usage patterns
 
-# 5. Start UI (Terminal 2)
-streamlit run frontend/streamlit_ui/app.py
+### 🏆 Arm Challenge
+- ✅ Dockerized for Apple Silicon (ARM architecture)
 
-# 6. Access
-# - Streamlit UI: http://localhost:8501
-# - API Docs: http://localhost:8000/docs
-```
+### 🏆 Best Representation of Theme (Odyssey)
+- ✅ Literal journey through daily destinations
+- ✅ Style evolution as you travel through your day
 
-## Testing
+## Demo Scenario
 
-```bash
-pytest tests/
-python test_e2e.py
-```
+**User**: "I have classes, then a pub meetup, then a movie"
 
-## Grafana Setup
+**IntentAgent**: Classifies as multi-context outfit recommendation  
+**VisionAgent**: (If image uploaded) Analyzes current wardrobe  
+**RecommendationAgent**: Suggests versatile outfit with transition tips  
+**ConversationAgent**: Asks about preferences and clarifies details  
+**ImageGenAgent**: Generates visual of the recommended outfit  
 
-See `grafana/README.md` for monitoring setup.
+## Metrics & Monitoring
 
-## Demo
+View real-time agent performance in Grafana:
+- Total requests processed
+- Agent call distribution
+- Response time per agent
+- Requests per minute
 
-Sample wardrobe images available in `datasets/sample_images.md`
+## Team
 
-## License
+Built at HackSheffield10 (Nov 29-30, 2025)
 
-MIT
+---
+
+*"Every day is a journey. Let AI guide your style."* 🧭

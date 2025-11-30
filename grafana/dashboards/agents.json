@@ -1,0 +1,83 @@
+{
+  "title": "Retail Odyssey - AI Agents",
+  "uid": "retail-odyssey-agents",
+  "timezone": "browser",
+  "schemaVersion": 16,
+  "version": 0,
+  "refresh": "5s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Requests",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "retail_odyssey_total_requests_total",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "green"},
+              {"value": 50, "color": "yellow"},
+              {"value": 100, "color": "red"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Agent Calls by Agent",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "retail_odyssey_agent_calls_total",
+          "legendFormat": "{{agent_name}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 18, "x": 6, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "Agent Response Time (avg seconds)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(retail_odyssey_response_time_sum[1m]) / rate(retail_odyssey_response_time_count[1m])",
+          "legendFormat": "{{agent_name}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Requests Per Minute",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(retail_odyssey_total_requests_total[1m]) * 60",
+          "legendFormat": "Requests/min",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+    }
+  ],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  }
+}

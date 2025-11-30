@@ -1,37 +1,47 @@
 import os
-import base64
-import io
-import google.generativeai as genai
+from dotenv import load_dotenv
+from google import genai
 
-_configured = False
+load_dotenv()
 
-def configure_genai():
-    global _configured
-    if not _configured:
-        api_key = os.getenv("GEMINI_API_KEY")
-        if api_key:
-            genai.configure(api_key=api_key)
-            _configured = True
-    return _configured
+_client = None
+
+def get_client():
+    global _client
+    if _client is None:
+        key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+        if key:
+            _client = genai.Client(api_key=key)
+    return _client
 
 async def generate_outfit_image(description: str) -> str:
-    if not configure_genai():
-        return ""
+    """Generate outfit image using Gemini 2.5 Flash Image"""
+    client = get_client()
+    if not client:
+        print("ImageGenAgent: No client configured")
+        return None
     
     try:
-        prompt = f"Professional fashion photography of a mannequin wearing: {description}. Studio lighting, neutral background."
+        prompt = f"A realistic fashion photography shot of a mannequin wearing: {description}. Neutral studio background, professional lighting, high resolution."
+        print(f"ImageGenAgent: Generating image...")
         
-        model = genai.GenerativeModel("gemini-2.0-flash-exp")
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash-image",
+            contents={"parts": [{"text": prompt}]}
+        )
         
-        for part in response.parts:
-            if hasattr(part, 'inline_data') and part.inline_data:
-                image = part.as_image()
-                buffered = io.BytesIO()
-                image.save(buffered, format="JPEG")
-                return base64.b64encode(buffered.getvalue()).decode()
+        # Extract image from response
+        if response.candidates:
+            for part in response.candidates[0].content.parts:
+                if hasattr(part, 'inline_data') and part.inline_data:
+                    import base64
+                    img_data = base64.b64encode(part.inline_data.data).decode('utf-8')
+                    print(f"ImageGenAgent: Generated {len(img_data)} chars")
+                    return img_data
         
-        return ""
+        print("ImageGenAgent: No image in response")
+        return None
+        
     except Exception as e:
-        print(f"Image generation error: {e}")
-        return ""
+        print(f"ImageGenAgent error: {e}")
+        return None

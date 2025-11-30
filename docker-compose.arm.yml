@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.arm
+    platform: linux/arm64
     ports:
       - "8000:8000"
     environment:
@@ -10,18 +13,22 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
       - ./.env:/app/.env
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:latest
+    platform: linux/arm64
     ports:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: unless-stopped
 
   grafana:
     image: grafana/grafana:latest
+    platform: linux/arm64
     ports:
       - "3000:3000"
     environment:
@@ -33,6 +40,7 @@ services:
       - ./grafana/datasources:/etc/grafana/provisioning/datasources
     depends_on:
       - prometheus
+    restart: unless-stopped
 
 volumes:
   grafana-storage:

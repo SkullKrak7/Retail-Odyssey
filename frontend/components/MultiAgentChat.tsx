@@ -5,7 +5,7 @@ interface Message {
   id: string;
   sender: string;
   content: string;
-  timestamp: Date;
+  timestamp: string | Date;
   imageBase64?: string;
 }
 
@@ -26,7 +26,7 @@ const MultiAgentChat: React.FC = () => {
     {
       id: '0',
       sender: 'System',
-      content: 'Welcome! Ask our AI fashion agents for outfit advice, style tips, or recommendations. You can optionally upload images of your wardrobe.',
+      content: 'Welcome to your Style Odyssey! 🧭 Tell me about your journey today - where are you going? Our AI agents will collaborate to guide your fashion choices through every destination.',
       timestamp: new Date()
     }
   ]);
@@ -71,7 +71,7 @@ const MultiAgentChat: React.FC = () => {
         id: `${Date.now()}-${r.agent}`,
         sender: r.agent,
         content: r.message,
-        timestamp: new Date(r.time),
+        timestamp: r.timestamp,
         imageBase64: r.image_base64
       }));
 
@@ -104,6 +104,7 @@ const MultiAgentChat: React.FC = () => {
   const getAgentColor = (sender: string) => {
     if (sender === 'You') return 'bg-blue-500 text-white';
     if (sender === 'System') return 'bg-gray-200 text-gray-700';
+    if (sender === 'IntentAgent') return 'bg-indigo-100 text-indigo-900';
     if (sender === 'VisionAgent') return 'bg-purple-100 text-purple-900';
     if (sender === 'RecommendationAgent') return 'bg-green-100 text-green-900';
     if (sender === 'ConversationAgent') return 'bg-yellow-100 text-yellow-900';
@@ -115,14 +116,20 @@ const MultiAgentChat: React.FC = () => {
     <div className="flex flex-col h-[calc(100vh-80px)]">
       <div className="bg-white border-b shadow-sm p-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <p className="text-gray-600">Chat with AI fashion agents - they collaborate in real-time</p>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Retail Odyssey</h1>
+            <p className="text-sm text-gray-600">Your AI-Powered Style Journey - 5 Agents Collaborating</p>
+          </div>
           <div className="flex gap-2">
             <button
-              onClick={() => {
+              onClick={async () => {
+                try {
+                  await fetch(`${API_URL}/api/clear`, { method: 'POST' });
+                } catch (e) {}
                 setMessages([{
                   id: '0',
                   sender: 'System',
-                  content: 'Chat cleared! Ask me anything about fashion.',
+                  content: 'Your journey begins anew! 🧭 Where will your style odyssey take you today?',
                   timestamp: new Date()
                 }]);
                 setUploadedImage(null);
@@ -170,7 +177,7 @@ const MultiAgentChat: React.FC = () => {
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-sm font-semibold text-gray-700">{msg.sender}</span>
                 <span className="text-xs text-gray-400">
-                  {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
               <div className={`rounded-2xl px-4 py-3 shadow-sm ${getAgentColor(msg.sender)}`}>
@@ -179,7 +186,7 @@ const MultiAgentChat: React.FC = () => {
                 </div>
                 {msg.imageBase64 && (
                   <img 
-                    src={`data:image/jpeg;base64,${msg.imageBase64}`} 
+                    src={`data:image/png;base64,${msg.imageBase64}`} 
                     alt="Generated outfit" 
                     className="mt-3 rounded-lg max-w-md w-full"
                   />
