@@ -77,13 +77,22 @@ const MultiAgentChat: React.FC = () => {
 
       const data = await response.json();
       
-      const agentMessages: Message[] = data.responses.map((r: any) => ({
-        id: `${Date.now()}-${r.agent}`,
-        sender: r.agent,
-        content: r.message,
-        timestamp: r.timestamp,
-        imageBase64: r.image_base64
-      }));
+      const agentMessages: Message[] = data.responses.map((r: any) => {
+        const msg: Message = {
+          id: `${Date.now()}-${r.agent}`,
+          sender: r.agent,
+          content: r.message,
+          timestamp: r.timestamp,
+          imageBase64: r.image_base64
+        };
+        
+        // Extract products from RecommendationAgent
+        if (r.agent === 'RecommendationAgent') {
+          msg.products = extractProducts(r.message);
+        }
+        
+        return msg;
+      });
 
       setMessages(prev => [...prev, ...agentMessages]);
       setUploadedImage(null);
@@ -177,6 +186,12 @@ const MultiAgentChat: React.FC = () => {
               🔄 New Chat
             </button>
             <button
+              onClick={() => setShowWishlist(!showWishlist)}
+              className="px-4 py-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg transition text-sm relative"
+            >
+              🛒 Cart {wishlist.length > 0 && `(${wishlist.length})`}
+            </button>
+            <button
               onClick={() => setShowBrands(!showBrands)}
               className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition text-sm"
             >
@@ -201,6 +216,60 @@ const MultiAgentChat: React.FC = () => {
                 {brand.name} →
               </a>
             ))}
+          </div>
+        </div>
+      )}
+
+      {showWishlist && (
+        <div className="bg-white border-b shadow-sm p-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-semibold text-gray-700">🛒 Your Shopping Cart</h3>
+              {wishlist.length > 0 && (
+                <button
+                  onClick={() => setWishlist([])}
+                  className="text-xs text-red-600 hover:text-red-800"
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
+            {wishlist.length === 0 ? (
+              <p className="text-sm text-gray-500">Your cart is empty. Add items from recommendations!</p>
+            ) : (
+              <>
+                <div className="space-y-2 mb-4">
+                  {wishlist.map((product, idx) => (
+                    <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                      <div>
+                        <p className="font-medium text-sm">{product.name}</p>
+                        <p className="text-xs text-gray-600">{product.brand}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="font-semibold text-green-600">{product.price}</span>
+                        <button
+                          onClick={() => setWishlist(wishlist.filter((_, i) => i !== idx))}
+                          className="text-red-500 hover:text-red-700 text-sm"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t pt-3 flex justify-between items-center">
+                  <span className="font-bold text-lg">Total: £{getTotalPrice()}</span>
+                  <a
+                    href="https://www.sportsdirect.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition font-medium"
+                  >
+                    Shop Complete Look →
+                  </a>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -236,6 +305,27 @@ const MultiAgentChat: React.FC = () => {
                     alt="Generated outfit" 
                     className="mt-3 rounded-lg max-w-md w-full"
                   />
+                )}
+                {msg.products && msg.products.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <p className="text-xs font-semibold text-gray-600 mb-2">💰 Recommended Products:</p>
+                    <div className="space-y-2">
+                      {msg.products.map((product, idx) => (
+                        <div key={idx} className="flex justify-between items-center bg-white bg-opacity-50 p-2 rounded">
+                          <div>
+                            <p className="text-xs font-medium">{product.name}</p>
+                            <p className="text-xs text-gray-600">{product.price}</p>
+                          </div>
+                          <button
+                            onClick={() => addToWishlist(product)}
+                            className="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition"
+                          >
+                            + Cart
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
                 {msg.sender === 'RecommendationAgent' && !msg.content.includes('🔗 Product Links') && (
                   <div className="mt-3 pt-3 border-t border-gray-200">
