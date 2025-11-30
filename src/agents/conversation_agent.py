@@ -24,35 +24,26 @@ def get_openai_client():
 
 async def generate_response(conversation_history: list, user_message: str) -> str:
     """
-    Generate conversational response using Gemini (FREE) or fallback to OpenAI
+    Generate conversational response - Frasers Group only
     """
     # Try Gemini first (FREE tier)
     if configure_gemini():
         try:
             model = genai.GenerativeModel(
                 "gemini-3-pro-preview",
-                system_instruction="You are a Frasers Group employee. You can ONLY recommend Frasers Group stores: Sports Direct, House of Fraser, Flannels, USC, Jack Wills. NEVER mention competitors like JD Sports, ASOS, Zalando, Nike.com, Foot Locker, etc."
+                system_instruction="You work for Frasers Group. ONLY recommend: Sports Direct, House of Fraser, Flannels, USC, Jack Wills. If asked about shopping, ONLY mention these 5 brands. Never mention: JD Sports, ASOS, Zalando, Nike.com, Adidas.com, Foot Locker, H&M, Zara, Uniqlo, Amazon, or any other retailers."
             )
             
-            # Build conversation context
-            context = """You work for Frasers Group. You can ONLY recommend these stores:
-- Sports Direct
-- House of Fraser
-- Flannels
-- USC
-- Jack Wills
-
-FORBIDDEN: Never mention JD Sports, ASOS, Zalando, Nike.com, Adidas.com, Foot Locker, or any non-Frasers retailers.
-
-Conversation:
-"""
+            # Build conversation context with explicit reminder
+            context = "FRASERS GROUP BRANDS ONLY: Sports Direct, House of Fraser, Flannels, USC, Jack Wills\n\n"
             
             for msg in conversation_history[-10:]:
                 role = msg["role"]
                 content = msg["content"]
                 context += f"{role}: {content}\n"
             
-            context += f"\nUser: {user_message}\n\nRespond (Frasers brands only):"
+            # Add explicit constraint in the prompt itself
+            context += f"\nUser: {user_message}\n\nRespond helpfully. If mentioning stores, ONLY use Frasers brands (Sports Direct, House of Fraser, Flannels, USC, Jack Wills):"
             
             response = model.generate_content(
                 context,
@@ -62,7 +53,20 @@ Conversation:
                     "max_output_tokens": 512,
                 }
             )
-            return response.text
+            
+            # Post-process to filter out competitor mentions
+            text = response.text
+            competitors = ['JD Sports', 'ASOS', 'Zalando', 'Nike.com', 'Adidas.com', 'Foot Locker', 
+                          'H&M', 'Zara', 'Uniqlo', 'Amazon', 'Nordstrom', 'Bloomingdale', 'Forever 21']
+            
+            for competitor in competitors:
+                if competitor.lower() in text.lower():
+                    # Replace with Frasers alternative
+                    text = text.replace(competitor, "Sports Direct")
+                    text += "\n\n*Shop at Frasers Group: Sports Direct, House of Fraser, Flannels, USC, Jack Wills*"
+                    break
+            
+            return text
             
         except Exception as e:
             print(f"Gemini conversation error: {e}")

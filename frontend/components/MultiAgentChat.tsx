@@ -7,6 +7,14 @@ interface Message {
   content: string;
   timestamp: string | Date;
   imageBase64?: string;
+  products?: Product[];
+}
+
+interface Product {
+  name: string;
+  price: string;
+  brand: string;
+  url?: string;
 }
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -34,6 +42,8 @@ const MultiAgentChat: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [showBrands, setShowBrands] = useState(false);
+  const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [showWishlist, setShowWishlist] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,6 +109,34 @@ const MultiAgentChat: React.FC = () => {
       setUploadedImage(reader.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+  const extractProducts = (text: string): Product[] => {
+    const products: Product[] = [];
+    // Extract products with prices (e.g., "Nike Air Max (£89.99)")
+    const pricePattern = /([A-Za-z\s&]+)\s*\(([£€$]\d+(?:\.\d{2})?)\)/g;
+    let match;
+    while ((match = pricePattern.exec(text)) !== null) {
+      products.push({
+        name: match[1].trim(),
+        price: match[2],
+        brand: 'Sports Direct' // Default, could be smarter
+      });
+    }
+    return products;
+  };
+
+  const addToWishlist = (product: Product) => {
+    if (!wishlist.find(p => p.name === product.name)) {
+      setWishlist([...wishlist, product]);
+    }
+  };
+
+  const getTotalPrice = () => {
+    return wishlist.reduce((sum, p) => {
+      const price = parseFloat(p.price.replace(/[£€$]/g, ''));
+      return sum + (isNaN(price) ? 0 : price);
+    }, 0).toFixed(2);
   };
 
   const getAgentColor = (sender: string) => {
