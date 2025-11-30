@@ -82,23 +82,46 @@ npm run dev
 
 ## 📊 Grafana Monitoring
 
+**Access:** http://localhost:3000 (admin/admin)
+
 Real-time metrics dashboard showing:
 - Total requests processed
-- Agent call distribution
+- Agent call distribution  
 - Response time per agent
 - Requests per minute
+- Brand mentions tracking
+- Competitor blocks count
 
-See [GRAFANA_SETUP.md](GRAFANA_SETUP.md) for details.
+**Metrics Endpoint:** http://localhost:8000/metrics
 
-## 🥧 Raspberry Pi Deployment
+## 🥧 Raspberry Pi / ARM Deployment
 
-Optimized for ARM architecture (Pi 4/5, Apple Silicon):
+### Quick Setup (Pi 4/5 or Apple Silicon)
 
 ```bash
+# 1. Install Docker (if needed)
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# 2. Clone and run
+git clone https://github.com/SkullKrak7/HackSheff10.git
+cd HackSheff10
 docker-compose -f docker-compose.arm.yml up -d
 ```
 
-See [PI_SETUP.md](PI_SETUP.md) for full guide.
+### Performance Notes
+- **Pi 4 (4GB)**: All services run, image generation 10-15s
+- **Pi 5 (8GB)**: Smooth performance, image generation 5-8s
+- **Apple Silicon**: Native ARM64, full performance
+
+### Optimization
+```bash
+# Monitor resources
+docker stats
+
+# View logs
+docker-compose logs -f backend
+```
 
 ## 💡 Key Features
 

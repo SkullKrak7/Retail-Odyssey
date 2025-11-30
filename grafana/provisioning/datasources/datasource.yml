@@ -1,9 +1,0 @@
-apiVersion: 1
-
-datasources:
-  - name: RetailOdyssey Metrics
-    type: prometheus
-    access: proxy
-    url: http://api:8000/api/prometheus
-    isDefault: true
-    editable: true
