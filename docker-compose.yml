@@ -1,6 +1,7 @@
 services:
   backend:
     build: .
+    platform: linux/arm64
     ports:
       - "8000:8000"
     environment:
@@ -11,6 +12,7 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
+    platform: linux/arm64
     ports:
       - "9090:9090"
     volumes:
@@ -20,6 +22,7 @@ services:
 
   grafana:
     image: grafana/grafana:latest
+    platform: linux/arm64
     ports:
       - "3000:3000"
     environment:
