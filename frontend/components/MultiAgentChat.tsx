@@ -254,7 +254,7 @@ const MultiAgentChat: React.FC = () => {
           </button>
         </div>
         <p className="text-xs text-gray-500 mt-2 text-center">
-          Powered by OpenAI GPT-4 • Multi-Agent Collaboration
+          Powered by Google Gemini 2.0 • Multi-Agent Collaboration • Frasers Group
         </p>
         </div>
       </div>
