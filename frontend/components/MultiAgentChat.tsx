@@ -191,6 +191,24 @@ const MultiAgentChat: React.FC = () => {
                     className="mt-3 rounded-lg max-w-md w-full"
                   />
                 )}
+                {msg.sender === 'RecommendationAgent' && (
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <p className="text-xs font-semibold text-gray-600 mb-2">🛍️ Shop at Frasers Group:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {FRASERS_BRANDS.map(brand => (
+                        <a
+                          key={brand.name}
+                          href={brand.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs px-3 py-1 bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
+                        >
+                          {brand.name} →
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
