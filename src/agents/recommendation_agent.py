@@ -27,30 +27,38 @@ def get_openai_client():
 
 async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str:
     """
-    Recommend outfit using Gemini with Frasers Group focus
+    Recommend outfit using Gemini with real Frasers product grounding
     """
     if configure_gemini():
         try:
-            model = genai.GenerativeModel("gemini-3-pro-preview")
+            model = genai.GenerativeModel(
+                "gemini-3-pro-preview",
+                tools=[{"google_search": {}}]  # Enable search grounding
+            )
             
-            prompt = f"""You're a fashion stylist for Frasers Group. Recommend outfits and tell users which Frasers brand to shop at:
+            prompt = f"""You're a fashion stylist. Search for REAL products available on Frasers Group websites and recommend them.
 
-**Frasers Group Brands:**
-- **Sports Direct** (sportswear, activewear, casual) - sportsdirect.com
-- **House of Fraser** (premium fashion, formal wear) - houseoffraser.co.uk  
-- **Flannels** (luxury designer brands) - flannels.com
-- **USC** (streetwear, youth fashion) - usc.co.uk
-- **Jack Wills** (British heritage, preppy style) - jackwills.com
+**Search these sites for actual products:**
+- sportsdirect.com (activewear, casual)
+- houseoffraser.co.uk (premium fashion)
+- flannels.com (designer brands)
+- usc.co.uk (streetwear)
+- jackwills.com (British style)
 
 **User Request:** {user_request}
 **Available Wardrobe:** {wardrobe_context if wardrobe_context else "None"}
 
-**Your Response Must Include:**
-1. 2-3 outfit items
-2. Which Frasers brand to buy each item from (be specific!)
-3. Why it works
+**Your Response Must:**
+1. Search for 2-3 REAL products with prices
+2. Provide specific product names and brands
+3. Mention which Frasers site to buy from
+4. Keep under 150 words
 
-Keep under 150 words. Always mention at least 2 Frasers brands."""
+Format example:
+"Nike Air Max 90 (£89.99) from Sports Direct
+Ted Baker Blazer (£199) from House of Fraser"
+
+Search now and recommend real products."""
             
             response = model.generate_content(
                 prompt,
@@ -60,7 +68,23 @@ Keep under 150 words. Always mention at least 2 Frasers brands."""
                     "max_output_tokens": 512,
                 }
             )
-            return response.text
+            
+            result = response.text
+            
+            # Extract grounding metadata if available
+            if hasattr(response, 'candidates') and response.candidates:
+                candidate = response.candidates[0]
+                if hasattr(candidate, 'grounding_metadata') and candidate.grounding_metadata:
+                    if hasattr(candidate.grounding_metadata, 'grounding_chunks'):
+                        result += "\n\n**🔗 Product Links:**"
+                        for chunk in candidate.grounding_metadata.grounding_chunks[:5]:
+                            if hasattr(chunk, 'web') and chunk.web:
+                                title = chunk.web.title if hasattr(chunk.web, 'title') else 'Product'
+                                uri = chunk.web.uri if hasattr(chunk.web, 'uri') else ''
+                                if uri:
+                                    result += f"\n- [{title}]({uri})"
+            
+            return result
             
         except Exception as e:
             print(f"Gemini recommendation error: {e}")

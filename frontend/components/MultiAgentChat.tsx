@@ -182,7 +182,15 @@ const MultiAgentChat: React.FC = () => {
               </div>
               <div className={`rounded-2xl px-4 py-3 shadow-sm ${getAgentColor(msg.sender)}`}>
                 <div className="prose prose-sm max-w-none">
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  <ReactMarkdown
+                    components={{
+                      a: ({node, ...props}) => (
+                        <a {...props} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline" />
+                      )
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
                 </div>
                 {msg.imageBase64 && (
                   <img 
@@ -191,7 +199,7 @@ const MultiAgentChat: React.FC = () => {
                     className="mt-3 rounded-lg max-w-md w-full"
                   />
                 )}
-                {msg.sender === 'RecommendationAgent' && (
+                {msg.sender === 'RecommendationAgent' && !msg.content.includes('🔗 Product Links') && (
                   <div className="mt-3 pt-3 border-t border-gray-200">
                     <p className="text-xs font-semibold text-gray-600 mb-2">🛍️ Shop at Frasers Group:</p>
                     <div className="flex flex-wrap gap-2">
