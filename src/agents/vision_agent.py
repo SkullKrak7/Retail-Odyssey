@@ -30,7 +30,11 @@ def get_openai_client():
 
 async def analyze_wardrobe(image_url: str, context: str = "") -> str:
     """
-    Analyze wardrobe image using Gemini Vision (FREE) or fallback to OpenAI
+    Analyzes wardrobe/outfit images using Gemini 3 Pro Vision.
+    Supports both base64 data URLs and HTTP URLs.
+    Falls back to OpenAI GPT-4o Vision if Gemini is unavailable.
+    
+    Returns detailed description of clothing items, colors, styles, and how they work together.
     """
     # Try Gemini first (FREE tier)
     if configure_gemini():

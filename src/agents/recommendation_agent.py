@@ -28,7 +28,15 @@ def get_openai_client():
 
 async def recommend_outfit(user_request: str, wardrobe_context: str = "") -> str:
     """
-    Recommend outfit using Gemini with Google Search grounding for real products
+    Recommends outfits using Gemini 2.5 Flash with Google Search grounding.
+    Searches exclusively on Frasers Group websites for real products.
+    
+    Features:
+    - Restricts search to Frasers domains (sportsdirect.com, houseoffraser.co.uk, etc.)
+    - Returns actual product names, prices, and clickable links
+    - Tracks brand mentions and product recommendations via Prometheus
+    - Adds inline citations to product pages when available
+    - Falls back to OpenAI GPT-4o-mini if Gemini unavailable
     """
     if configure_gemini():
         try:
@@ -121,7 +129,7 @@ Keep response under 150 words."""
                                     uri = chunks[i].web.uri
                                     # Only add Frasers links
                                     if any(domain in uri for domain in frasers_domains):
-                                        citation_links.append(f"[🔗]({uri})")
+                                        citation_links.append(f"[Link]({uri})")
                             
                             if citation_links:
                                 citation_string = " " + " ".join(citation_links)

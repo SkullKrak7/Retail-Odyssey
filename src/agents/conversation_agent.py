@@ -25,7 +25,15 @@ def get_openai_client():
 
 async def generate_response(conversation_history: list, user_message: str) -> str:
     """
-    Generate conversational response - Frasers Group only
+    Generates natural conversational responses using Gemini 3 Pro.
+    Maintains conversation context and enforces Frasers Group brand loyalty.
+    
+    Features:
+    - Uses last 10 messages for context
+    - Actively filters competitor brand mentions (25+ brands)
+    - Replaces competitor mentions with Frasers alternatives
+    - Tracks competitor blocks via Prometheus metrics
+    - Falls back to OpenAI GPT-4o-mini if Gemini unavailable
     """
     # Try Gemini first (FREE tier)
     if configure_gemini():

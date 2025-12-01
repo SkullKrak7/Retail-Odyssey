@@ -34,6 +34,18 @@ class Message:
         self.image_base64 = image_base64
 
 class GroupChatOrchestrator:
+    """
+    Coordinates multi-agent collaboration for fashion recommendations.
+    
+    Manages conversation flow between 5 specialized agents:
+    - IntentAgent: Classifies user requests
+    - VisionAgent: Analyzes wardrobe images
+    - RecommendationAgent: Searches Frasers products
+    - ConversationAgent: Maintains dialogue
+    - ImageGenAgent: Generates outfit visualizations
+    
+    Maintains conversation history (last 20 messages) and tracks metrics via Prometheus.
+    """
     def __init__(self):
         self.messages: List[Message] = []
         self.wardrobe_context = ""
@@ -55,7 +67,7 @@ class GroupChatOrchestrator:
         
         # IntentAgent announces its analysis
         intent_parts = []
-        intent_parts.append(f"🎯 **Intent Classification**")
+        intent_parts.append(f"**Intent Classification**")
         intent_parts.append(f"- Primary Intent: {intent['primary_intent'].replace('_', ' ').title()}")
         intent_parts.append(f"- Occasion: {intent['occasion'].title()}")
         if intent.get('style_preference') != 'unknown':

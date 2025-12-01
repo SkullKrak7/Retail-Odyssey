@@ -1,6 +1,6 @@
 {
-  "name": "StyleSense AI",
-  "description": "An AI-powered personal stylist that reduces choice fatigue by analyzing your wardrobe and creating tailored outfits for any event.",
+  "name": "Retail Odyssey",
+  "description": "AI-powered multi-agent fashion assistant with real-time product recommendations from Frasers Group stores.",
   "requestFramePermissions": [
     "camera"
   ]

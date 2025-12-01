@@ -26,16 +26,17 @@ def get_openai_client():
 
 async def parse_intent(user_message: str, conversation_history: List[Dict] = None) -> Dict:
     """
-    Parse user intent using Gemini (FREE) or fallback to OpenAI
-    Returns: {
-        "primary_intent": str,
-        "needs_vision": bool,
-        "needs_recommendation": bool,
-        "needs_image_gen": bool,
-        "occasion": str,
-        "style_preference": str,
-        "urgency": str
-    }
+    Analyzes user message to determine intent and required agent actions.
+    Uses Gemini 3 Pro for classification, with OpenAI GPT-4o-mini as fallback.
+    
+    Returns structured intent with:
+    - primary_intent: Type of request (wardrobe_analysis, outfit_recommendation, etc.)
+    - needs_vision: Whether VisionAgent should process images
+    - needs_recommendation: Whether RecommendationAgent should search products
+    - needs_image_gen: Whether ImageGenAgent should generate visualizations
+    - occasion: Event type (casual, formal, business, etc.)
+    - style_preference: User's style (classic, trendy, minimalist, etc.)
+    - urgency: Timeline (immediate, normal, planning)
     """
     # Try Gemini first (FREE tier)
     if configure_gemini():

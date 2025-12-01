@@ -15,7 +15,12 @@ def get_client():
     return _client
 
 async def generate_outfit_image(description: str) -> str:
-    """Generate outfit image using Gemini 2.5 Flash Image"""
+    """
+    Generates outfit visualization images using Gemini 3 Pro Image.
+    Creates realistic fashion photography with professional studio lighting.
+    
+    Returns base64-encoded image data for immediate display, or None if generation fails.
+    """
     client = get_client()
     if not client:
         print("ImageGenAgent: No client configured")

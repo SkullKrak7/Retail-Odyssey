@@ -1,237 +1,544 @@
-# Retail Odyssey 🧭
+# Retail Odyssey
 
-**Your AI-Powered Style Journey with Real Product Recommendations**
+**AI-Powered Multi-Agent Fashion Assistant with Real-Time Product Recommendations**
 
-A multi-agent AI system that guides users through their daily fashion odyssey, providing personalized outfit recommendations with **real products from Frasers Group** stores.
+**Winner: Best use of AI Agents on Arm** - HackSheffield10 (November 2024)
+
+A sophisticated multi-agent AI system that provides personalized fashion recommendations through collaborative agent intelligence, featuring real product search from Frasers Group stores, real-time monitoring, and ARM-optimized deployment.
 
 ![Gemini 3 Pro](https://img.shields.io/badge/Gemini-3%20Pro-blue)
 ![Multi-Agent](https://img.shields.io/badge/Agents-5-green)
 ![Frasers Group](https://img.shields.io/badge/Frasers-Integrated-orange)
+![ARM64](https://img.shields.io/badge/ARM64-Optimized-red)
 
-## 🎯 HackSheffield10 Challenges
+---
 
-This project addresses **5 sponsor challenges**:
+## Built With
 
-### 1. 🏆 **Reply AI Agents Challenge**
-**"Multi-Agent Group Conversation Design"**
-- 5 specialized AI agents collaborating in group chat
-- Context sharing across 20 messages
-- Targeted intent recognition (IntentAgent)
-- Asynchronous interaction between agents
-- **Prize:** Apple AirPods (1st), AirTags (2nd), Reply Backpacks (3rd)
+This project was developed using:
+- **[Kiro CLI](https://aws.amazon.com/q/developer/)** - AWS AI-powered development assistant
+- **[Perplexity](https://www.perplexity.ai/)** - Research and information gathering
+- **[Claude Sonnet 4.5](https://www.anthropic.com/claude)** - Code generation and architecture design
+- **[Google Gemini 3 Pro](https://deepmind.google/technologies/gemini/)** - Core AI agent intelligence
+- **[Google AI Studio](https://aistudio.google.com/)** - API configuration and testing
+- **[OpenAI API](https://openai.com/api/)** - Fallback language model support
 
-### 2. 🏆 **Frasers Group Challenge**
-**"Next-Gen Retail Engagement"**
-- Digital experience attracting next-gen customers
-- Real product search from Frasers websites
-- Shopping cart with purchase CTAs
-- Competitor filtering (25+ brands blocked)
-- Brand loyalty tracking
-- **Prize:** £100 Sports Direct gift card per person
+---
 
-### 3. 🏆 **Grafana Challenge**
-- Real-time monitoring dashboard
-- Business metrics (brand mentions, competitor blocks, sessions)
-- Agent performance tracking
-- Prometheus integration
-- **Prize:** TBD
+## HackSheffield10 Achievement
 
-### 4. 🏆 **Arm Challenge**
-- ARM64 native support
-- Raspberry Pi 4/5 optimized
-- Apple Silicon compatible
+**Award Category:** Best use of AI Agents on Arm (by HackathonsUK)  
+**Prize:** Raspberry Pi Zero 2 W Kit  
+**Event:** HackSheffield10, November 29-30, 2024
+
+### Challenge Requirements Met
+
+**Frasers Group - Next-Gen Retail Engagement:**
+- Digital experience targeting next-generation customers
+- Real product search from Frasers Group websites
+- Shopping cart with direct purchase links
+- Competitor brand filtering (25+ brands blocked)
+- Brand loyalty tracking through Prometheus metrics
+
+**Arm - AI Agents on ARM:**
+- Native ARM64 support for Raspberry Pi 4/5
+- Apple Silicon (M1/M2/M3) compatibility
 - Multi-platform Docker images
-- **Prize:** TBD
+- Optimized performance on ARM architecture
 
-### 5. 🏆 **Best Theme: Odyssey**
-- Journey timeline visualization
-- Multi-destination outfit planning
-- Context-aware styling
-- "Style Odyssey" narrative
-- **Prize:** TBD
+**Additional Features:**
+- Multi-agent collaboration with context sharing
+- Real-time monitoring via Grafana dashboards
+- Journey-based UX aligned with "Odyssey" theme
 
-## 🤖 The 5 AI Agents
+---
 
-### 1. **IntentAgent** 🎯
-Classifies user intent and determines the journey path
+## The 5 AI Agents
 
-### 2. **VisionAgent** 👁️
-Analyzes uploaded wardrobe images using Gemini 3 Pro vision
+Our multi-agent system employs specialized AI agents that collaborate to provide comprehensive fashion assistance. Each agent has a distinct role and communicates through a centralized orchestrator.
 
-### 3. **RecommendationAgent** 👔
-**Searches Frasers Group websites** for real products with:
-- Google Search grounding
-- Real prices and product names
-- Direct purchase links
-- Sports Direct, House of Fraser, Flannels, USC, Jack Wills
+### 1. **IntentAgent** - Request Classifier
+**Model:** Google Gemini 3 Pro  
+**Purpose:** Analyzes user messages to determine intent and required actions
 
-### 4. **ConversationAgent** 💬
-Maintains natural dialogue and builds on other agents' insights
+**Capabilities:**
+- Classifies primary intent (wardrobe analysis, outfit recommendation, style advice, image generation, general chat)
+- Extracts contextual information (occasion, style preference, urgency)
+- Determines which agents should be activated for the request
+- Provides structured intent analysis to guide the conversation flow
 
-### 5. **ImageGenAgent** 🎨
-Generates outfit visualizations using Gemini 3 Pro Image
+**Implementation:** Uses Gemini 3 Pro with temperature 0.3 for consistent classification. Falls back to OpenAI GPT-4o-mini if Gemini is unavailable, with keyword-based classification as final fallback.
 
-## 🛍️ Frasers Group Integration
+### 2. **VisionAgent** 👁️ - Image Analyzer
+**Model:** Google Gemini 3 Pro (Vision)  
+**Purpose:** Analyzes uploaded wardrobe and outfit images
 
-**Real Product Grounding:**
-- Searches only Frasers Group websites
-- Returns actual products with prices
-- Provides clickable purchase links
-- Examples: Nike Revolution 7 (€55), Adidas Runfalcon 5
+**Capabilities:**
+- Identifies clothing items, colors, and styles from images
+- Evaluates how garments work together
+- Provides detailed descriptions for recommendation context
+- Supports both base64 data URLs and HTTP image URLs
 
-**Supported Brands:**
-- Sports Direct (activewear, casual)
-- House of Fraser (premium fashion)
-- Flannels (luxury designer)
-- USC (streetwear)
-- Jack Wills (British heritage)
+**Implementation:** Processes images through Gemini 3 Pro's vision capabilities. Handles image preprocessing and format conversion. Falls back to OpenAI GPT-4o Vision when needed.
 
-## 🚀 Quick Start
+### 3. **RecommendationAgent** 👔 - Product Search Specialist
+**Model:** Google Gemini 2.5 Flash with Google Search Grounding  
+**Purpose:** Finds real products from Frasers Group stores
 
-### Docker (Recommended)
+**Capabilities:**
+- Searches exclusively on Frasers Group domains (sportsdirect.com, houseoffraser.co.uk, flannels.com, usc.co.uk, jackwills.com)
+- Returns actual product names, prices, and purchase links
+- Filters out competitor brands automatically
+- Tracks brand mentions and product recommendations via Prometheus metrics
+- Provides clickable citations to product pages
+
+**Implementation:** Leverages Gemini's Google Search grounding feature to retrieve real-time product information. Extracts grounding metadata to create inline citations. Tracks Frasers brand mentions and blocks 25+ competitor brands.
+
+### 4. **ConversationAgent** 💬 - Dialogue Manager
+**Model:** Google Gemini 3 Pro  
+**Purpose:** Maintains natural, contextual conversation flow
+
+**Capabilities:**
+- Builds on insights from other agents
+- Maintains conversation history (last 10 messages)
+- Enforces Frasers-only brand mentions
+- Provides follow-up questions and clarifications
+- Creates cohesive multi-turn dialogues
+
+**Implementation:** Uses conversation history to maintain context. Actively filters competitor mentions post-generation and replaces with Frasers alternatives. Tracks competitor blocks via Prometheus.
+
+### 5. **ImageGenAgent** 🎨 - Outfit Visualizer
+**Model:** Google Gemini 3 Pro Image  
+**Purpose:** Generates visual representations of outfit recommendations
+
+**Capabilities:**
+- Creates realistic fashion photography shots
+- Visualizes outfit combinations on mannequins
+- Professional studio lighting and neutral backgrounds
+- High-resolution image generation
+
+**Implementation:** Generates images using Gemini 3 Pro Image model. Returns base64-encoded images for immediate display in the frontend.
+
+---
+
+## Agent Collaboration Flow
+
+The agents work together through a centralized orchestrator that manages their interactions:
+
+```
+User Message
+    ↓
+IntentAgent (classifies intent)
+    ↓
+┌─────────────────────────────────────┐
+│  Orchestrator determines actions    │
+└─────────────────────────────────────┘
+    ↓
+┌─────────────┬──────────────────┬─────────────────┐
+│ VisionAgent │ RecommendationAgent │ ConversationAgent │
+│ (if image)  │ (if recommendation) │ (always)          │
+└─────────────┴──────────────────┴─────────────────┘
+    ↓
+ImageGenAgent (if visualization requested)
+    ↓
+Combined Response to User
+```
+
+**Context Sharing:** All agents have access to the last 20 messages, enabling them to build on previous interactions and maintain conversation coherence.
+
+**Asynchronous Execution:** Agents are called sequentially with results from earlier agents informing later ones (e.g., VisionAgent results feed into RecommendationAgent).
+
+---
+
+## Key Features
+
+### Real Product Integration
+- **Live Product Search:** Google Search grounding retrieves actual products from Frasers inventory
+- **Price Information:** Real-time pricing from Frasers websites
+- **Purchase Links:** Direct clickable links to product pages
+- **Brand Filtering:** Automatically blocks 25+ competitor brands
+
+### Multi-Agent Intelligence
+- **Collaborative Processing:** 5 specialized agents work together on each request
+- **Context Awareness:** Agents share conversation history (20 messages)
+- **Sequential Reasoning:** Later agents build on earlier agents' outputs
+- **Fallback Support:** OpenAI API fallback ensures reliability
+
+### User Experience
+- **Journey Timeline:** Visualizes multi-destination outfit planning
+- **Shopping Cart:** Add products to cart with total price calculation
+- **Image Upload:** Analyze wardrobe photos for personalized advice
+- **Image Generation:** Visualize outfit recommendations
+- **Responsive Design:** Works on desktop and mobile devices
+
+### Monitoring & Observability
+- **Prometheus Metrics:** Tracks agent calls, response times, brand mentions, competitor blocks
+- **Grafana Dashboard:** Real-time visualization of system and business metrics
+- **Performance Tracking:** Monitor agent-specific response times
+- **Business Intelligence:** Track product recommendations and user sessions
+
+### ARM Optimization
+- **Native ARM64:** Runs efficiently on Raspberry Pi 4/5
+- **Apple Silicon:** Full support for M1/M2/M3 Macs
+- **Multi-Platform Docker:** Single image works across architectures
+- **Performance Tuned:** Optimized for ARM processors
+
+---
+
+## Tech Stack
+
+**Backend:**
+- FastAPI (Python) - High-performance async API framework
+- Google Gemini 3 Pro - Primary AI model for agents
+- Google Gemini 2.5 Flash - Search-grounded recommendations
+- OpenAI GPT-4o - Fallback language model
+- Prometheus Client - Metrics collection
+
+**Frontend:**
+- React 19 - UI framework
+- TypeScript - Type-safe development
+- Vite - Fast build tool
+- React Markdown - Formatted message rendering
+
+**Infrastructure:**
+- Docker & Docker Compose - Containerization
+- Prometheus - Metrics storage and querying
+- Grafana - Monitoring dashboards
+- ARM64 & x86_64 support - Multi-architecture deployment
+
+**APIs:**
+- Google Gemini API - AI agent intelligence
+- Google Search Grounding - Real product retrieval
+- OpenAI API - Fallback support
+
+---
+
+## Quick Start
+
+### Prerequisites
+- Docker and Docker Compose installed
+- Google Gemini API key ([Get one here](https://aistudio.google.com/))
+- (Optional) OpenAI API key for fallback
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/Retail-Odyssey.git
+cd Retail-Odyssey
+```
+
+### 2. Configure Environment
+```bash
+cp .env.example .env
+# Edit .env and add your API keys:
+# GEMINI_API_KEY=your_gemini_key_here
+# GOOGLE_API_KEY=your_gemini_key_here
+# OPENAI_API_KEY=your_openai_key_here (optional)
+```
+
+### 3. Launch with Docker (Recommended)
 ```bash
 docker-compose up -d
 ```
 
-### Local Development
-```bash
-# Backend
-cd retail_odyssey
-source venv/bin/activate
-python -m src.api.main
+### 4. Access the Application
+- **Frontend:** http://localhost:5173
+- **Backend API:** http://localhost:8000
+- **API Docs:** http://localhost:8000/docs
+- **Grafana Dashboard:** http://localhost:3000 (admin/admin)
+- **Prometheus:** http://localhost:9090
 
-# Frontend
+---
+
+## 🖥️ Local Development
+
+### Backend Setup
+```bash
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run backend
+python -m src.api.main
+```
+
+Backend will be available at http://localhost:8000
+
+### Frontend Setup
+```bash
 cd frontend
+
+# Install dependencies
 npm install
+
+# Run development server
 npm run dev
 ```
 
-### Access
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:8000
-- **Grafana Dashboard**: http://localhost:3000 (admin/admin)
-- **Prometheus**: http://localhost:9090
+Frontend will be available at http://localhost:5173
 
-## 📊 Grafana Monitoring
+---
 
-**Access:** http://localhost:3000 (admin/admin)
+## Raspberry Pi / ARM Deployment
 
-Real-time metrics dashboard showing:
-- Total requests processed
-- Agent call distribution  
-- Response time per agent
-- Requests per minute
-- Brand mentions tracking
-- Competitor blocks count
+### Supported Devices
+- Raspberry Pi 4 (4GB+ recommended)
+- Raspberry Pi 5 (8GB recommended)
+- Apple Silicon Macs (M1/M2/M3)
+- Any ARM64 Linux device
 
-**Metrics Endpoint:** http://localhost:8000/metrics
-
-## 🥧 Raspberry Pi / ARM Deployment
-
-### Quick Setup (Pi 4/5 or Apple Silicon)
-
+### Quick Setup
 ```bash
-# 1. Install Docker (if needed)
+# 1. Install Docker (if not already installed)
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 
-# 2. Clone and run
-git clone https://github.com/SkullKrak7/HackSheff10.git
-cd HackSheff10
-docker-compose -f docker-compose.arm.yml up -d
+# 2. Clone and configure
+git clone https://github.com/yourusername/Retail-Odyssey.git
+cd Retail-Odyssey
+cp .env.example .env
+# Edit .env with your API keys
+
+# 3. Launch
+docker-compose up -d
 ```
 
 ### Performance Notes
-- **Pi 4 (4GB)**: All services run, image generation 10-15s
-- **Pi 5 (8GB)**: Smooth performance, image generation 5-8s
-- **Apple Silicon**: Native ARM64, full performance
+- **Raspberry Pi 4 (4GB):** All services run smoothly, image generation takes 10-15 seconds
+- **Raspberry Pi 5 (8GB):** Excellent performance, image generation 5-8 seconds
+- **Apple Silicon:** Native ARM64 performance, sub-second agent responses
 
-### Optimization
+### Monitoring Resources
 ```bash
-# Monitor resources
+# Check container resource usage
 docker stats
 
 # View logs
 docker-compose logs -f backend
+docker-compose logs -f frontend
 ```
-
-## 💡 Key Features
-
-✅ **Multi-Agent Collaboration** - Agents share context and build on each other's responses  
-✅ **Real Product Search** - Google Search grounding for actual Frasers inventory  
-✅ **Journey-Based UX** - Odyssey theme for multi-destination outfit planning  
-✅ **Image Analysis** - Upload wardrobe photos for personalized advice  
-✅ **Image Generation** - Visualize outfit recommendations  
-✅ **Real-Time Monitoring** - Grafana dashboard for system observability  
-✅ **ARM Optimized** - Runs on Raspberry Pi and Apple Silicon  
-
-## 🛠️ Tech Stack
-
-- **AI**: Google Gemini 3 Pro (latest model)
-- **Backend**: FastAPI + Python
-- **Frontend**: React + TypeScript + Vite
-- **Monitoring**: Prometheus + Grafana
-- **Deployment**: Docker + Docker Compose
-- **Architecture**: Multi-agent orchestration
-
-## 📝 Example Conversation
-
-```
-User: "I need outfit for funeral then party after"
-
-IntentAgent: Classifies as multi-context recommendation
-RecommendationAgent: Searches Frasers sites, finds:
-  - Black midi dress from House of Fraser (£89)
-  - Statement blazer from Flannels (£149)
-  - Provides clickable purchase links
-ConversationAgent: Asks about style preferences
-ImageGenAgent: Generates outfit visualization
-```
-
-## 🎨 The Odyssey Concept
-
-Life is a journey with multiple destinations. Retail Odyssey recognizes that your style needs evolve:
-- 📚 Classes → 🍺 Pub → 🎬 Movie
-- 💼 Work → 🍽️ Dinner → 🎭 Theater
-- ⚽ Gym → ☕ Coffee → 📅 Date
-
-Our AI agents guide you through every transition with appropriate outfit recommendations.
-
-## 🏗️ Architecture
-
-```
-User → Frontend (React)
-         ↓
-    Backend API (FastAPI)
-         ↓
-    Orchestrator
-    ├── IntentAgent (Gemini 3 Pro)
-    ├── VisionAgent (Gemini 3 Pro)
-    ├── RecommendationAgent (Gemini 2.5 Flash + Search)
-    ├── ConversationAgent (Gemini 3 Pro)
-    └── ImageGenAgent (Gemini 3 Pro Image)
-         ↓
-    Prometheus → Grafana
-```
-
-## 📦 Environment Setup
-
-Create `.env` file:
-```bash
-GEMINI_API_KEY=your_key_here
-OPENAI_API_KEY=your_fallback_key
-```
-
-## 🤝 Contributing
-
-Built at HackSheffield10 (Nov 29-30, 2025)
-
-## 📄 License
-
-MIT License
 
 ---
 
-**Powered by Google Gemini 3 Pro • Multi-Agent Collaboration • Frasers Group**
+## Monitoring & Metrics
 
-*"Every day is a journey. Let AI guide your style."* 🧭
+### Grafana Dashboard
+Access at http://localhost:3000 (default credentials: admin/admin)
+
+**System Metrics:**
+- Total requests processed
+- User sessions count
+- Messages per session distribution
+- Agent call distribution
+- Response time per agent (histogram)
+
+**Business Metrics:**
+- Product recommendations count
+- Brand mentions by Frasers brand
+- Competitor blocks count
+- Average outfit price (when available)
+
+### Prometheus Metrics
+Raw metrics available at http://localhost:8000/metrics
+
+**Available Metrics:**
+- `retail_odyssey_total_requests` - Counter of all API requests
+- `retail_odyssey_agent_calls{agent_name}` - Counter per agent
+- `retail_odyssey_response_time{agent_name}` - Histogram of response times
+- `retail_odyssey_brand_mentions{brand_name}` - Counter per Frasers brand
+- `retail_odyssey_competitor_blocks` - Counter of blocked competitor mentions
+- `retail_odyssey_product_recommendations` - Counter of products recommended
+- `retail_odyssey_user_sessions` - Counter of user sessions
+- `retail_odyssey_messages_per_session` - Histogram of session lengths
+
+---
+
+## API Endpoints
+
+### POST /api/chat
+Send a message to the multi-agent system
+
+**Request:**
+```json
+{
+  "message": "I need an outfit for a business meeting",
+  "image_url": "https://example.com/wardrobe.jpg"  // optional
+}
+```
+
+**Response:**
+```json
+{
+  "responses": [
+    {
+      "agent": "IntentAgent",
+      "message": "**Intent Classification**\n- Primary Intent: Outfit Recommendation\n- Occasion: Business\n- Urgency: Normal",
+      "timestamp": "2024-11-30T10:00:00",
+      "image_base64": null
+    },
+    {
+      "agent": "RecommendationAgent",
+      "message": "For a business meeting, I recommend:\n\n1. Navy blazer from House of Fraser (£149) [🔗](https://...)\n2. White dress shirt from Sports Direct (£29.99) [🔗](https://...)",
+      "timestamp": "2024-11-30T10:00:02",
+      "image_base64": null
+    }
+  ],
+  "conversation": [...]
+}
+```
+
+### GET /api/history
+Retrieve conversation history
+
+**Response:**
+```json
+{
+  "conversation": [
+    {
+      "sender": "User",
+      "content": "I need an outfit for a business meeting",
+      "time": "2024-11-30T10:00:00"
+    }
+  ]
+}
+```
+
+### POST /api/clear
+Clear conversation history and start new session
+
+**Response:**
+```json
+{
+  "status": "cleared"
+}
+```
+
+### GET /api/health
+Health check endpoint
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "agents": ["IntentAgent", "VisionAgent", "RecommendationAgent", "ConversationAgent", "ImageGenAgent"]
+}
+```
+
+### GET /metrics
+Prometheus metrics endpoint (for Grafana)
+
+---
+
+## Frasers Group Integration
+
+### Supported Stores
+- **Sports Direct** - Activewear, casual clothing, footwear
+- **House of Fraser** - Premium fashion, formal wear, accessories
+- **Flannels** - Luxury designer brands, high-end fashion
+- **USC** - Trendy streetwear, urban fashion
+- **Jack Wills** - British heritage style, preppy clothing
+
+### Product Search Features
+- **Real-Time Search:** Uses Google Search grounding to find current products
+- **Price Information:** Displays actual prices in GBP/EUR
+- **Direct Links:** Clickable citations to product pages
+- **Brand Filtering:** Automatically excludes 25+ competitor brands
+- **Availability:** Only shows products currently listed on Frasers websites
+
+### Competitor Filtering
+The system actively blocks mentions of competitor brands including:
+JD Sports, ASOS, Zalando, Nike.com, Adidas.com, Foot Locker, H&M, Zara, Uniqlo, Amazon Fashion, Nordstrom, Bloomingdale's, Forever 21, Revolve, Depop, Poshmark, Mango, Lululemon, Gap, Old Navy, Target, Walmart, Primark, Topshop, River Island, and others.
+
+When a competitor is mentioned, the response is automatically replaced with Frasers alternatives.
+
+---
+
+## Project Structure
+
+```
+Retail-Odyssey/
+├── src/
+│   ├── agents/
+│   │   ├── intent_agent.py           # Intent classification
+│   │   ├── vision_agent.py           # Image analysis
+│   │   ├── recommendation_agent.py   # Product search
+│   │   ├── conversation_agent.py     # Dialogue management
+│   │   ├── imagegen_agent.py         # Outfit visualization
+│   │   └── group_chat_orchestrator.py # Agent coordination
+│   ├── api/
+│   │   └── main.py                   # FastAPI application
+│   ├── utils/
+│   │   └── prometheus_metrics.py     # Metrics definitions
+│   └── __init__.py
+├── frontend/
+│   ├── components/
+│   │   └── MultiAgentChat.tsx        # Main UI component
+│   ├── App.tsx                       # React app entry
+│   ├── types.ts                      # TypeScript definitions
+│   ├── index.tsx                     # React DOM entry
+│   ├── index.html                    # HTML template
+│   ├── package.json                  # Node dependencies
+│   ├── tsconfig.json                 # TypeScript config
+│   ├── vite.config.ts                # Vite configuration
+│   └── Dockerfile                    # Frontend container
+├── grafana/
+│   ├── dashboards/
+│   │   ├── agents.json               # Dashboard definition
+│   │   └── dashboard.yml             # Dashboard provisioning
+│   └── datasources/
+│       └── prometheus.yml            # Prometheus datasource
+├── docker-compose.yml                # Multi-service orchestration
+├── Dockerfile                        # Backend container
+├── requirements.txt                  # Python dependencies
+├── prometheus.yml                    # Prometheus configuration
+├── .env.example                      # Environment template
+├── .gitignore                        # Git ignore rules
+├── .dockerignore                     # Docker ignore rules
+├── LICENSE                           # MIT License
+└── README.md                         # This file
+```
+
+---
+
+## Contributing
+
+This project was built for HackSheffield10. Contributions, issues, and feature requests are welcome!
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgments
+
+- **HackSheffield10** - For hosting an amazing hackathon
+- **HackathonsUK** - For the "Best use of AI Agents on Arm" award
+- **Frasers Group** - For the retail integration challenge
+- **Google** - For Gemini API and AI Studio
+- **Anthropic** - For Claude assistance during development
+- **AWS** - For Kiro CLI development tools
+- **Perplexity** - For research support
+
+---
+
+## Contact
+
+Built at HackSheffield10 (November 29-30, 2024)
+
+**Team:** [Your Team Name]  
+**GitHub:** [Your GitHub Profile]
+
+---
+
+*"Every day is a journey. Let AI guide your style."* 

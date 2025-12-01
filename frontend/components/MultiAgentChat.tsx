@@ -40,7 +40,7 @@ const MultiAgentChat: React.FC = () => {
     {
       id: '0',
       sender: 'System',
-      content: 'Welcome to your Style Odyssey! 🧭 Tell me about your journey today - where are you going? Our AI agents will collaborate to guide your fashion choices through every destination.',
+      content: 'Welcome to Retail Odyssey! Tell me about your fashion needs today - where are you going? Our AI agents will collaborate to guide your style choices through every destination.',
       timestamp: new Date()
     }
   ]);
@@ -218,7 +218,7 @@ const MultiAgentChat: React.FC = () => {
                 setMessages([{
                   id: '0',
                   sender: 'System',
-                  content: 'Your journey begins anew! 🧭 Where will your style odyssey take you today?',
+                  content: 'Welcome to Retail Odyssey! Where will your style journey take you today?',
                   timestamp: new Date()
                 }]);
                 setUploadedImage(null);
@@ -227,27 +227,27 @@ const MultiAgentChat: React.FC = () => {
               }}
               className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-sm"
             >
-              🔄 New Chat
+              New Chat
             </button>
             <button
               onClick={() => setShowWishlist(!showWishlist)}
               className="px-4 py-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg transition text-sm relative"
             >
-              🛒 Cart {wishlist.length > 0 && `(${wishlist.length})`}
+              Cart {wishlist.length > 0 && `(${wishlist.length})`}
             </button>
             {journey.length > 0 && (
               <button
                 onClick={() => setShowTimeline(!showTimeline)}
                 className="px-4 py-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg transition text-sm"
               >
-                🗺️ Journey ({journey.length})
+                Journey ({journey.length})
               </button>
             )}
             <button
               onClick={() => setShowBrands(!showBrands)}
               className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition text-sm"
             >
-              🛍️ Shop Frasers
+              Shop Frasers
             </button>
           </div>
         </div>
@@ -276,7 +276,7 @@ const MultiAgentChat: React.FC = () => {
         <div className="bg-white border-b shadow-sm p-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-gray-700">🛒 Your Shopping Cart</h3>
+              <h3 className="font-semibold text-gray-700">Your Shopping Cart</h3>
               {wishlist.length > 0 && (
                 <button
                   onClick={() => setWishlist([])}
@@ -329,7 +329,7 @@ const MultiAgentChat: React.FC = () => {
       {showTimeline && journey.length > 0 && (
         <div className="bg-gradient-to-r from-purple-50 to-blue-50 border-b shadow-sm p-4">
           <div className="max-w-6xl mx-auto">
-            <h3 className="font-semibold text-gray-700 mb-4">🗺️ Your Style Odyssey Timeline</h3>
+            <h3 className="font-semibold text-gray-700 mb-4">Your Retail Odyssey Timeline</h3>
             <div className="relative">
               <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-purple-300"></div>
               <div className="space-y-4">
@@ -387,7 +387,7 @@ const MultiAgentChat: React.FC = () => {
                 )}
                 {msg.products && msg.products.length > 0 && (
                   <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="text-xs font-semibold text-gray-600 mb-2">💰 Recommended Products:</p>
+                    <p className="text-xs font-semibold text-gray-600 mb-2">Recommended Products:</p>
                     <div className="space-y-2">
                       {msg.products.map((product, idx) => (
                         <div key={idx} className="flex justify-between items-center bg-white bg-opacity-50 p-2 rounded">
@@ -408,7 +408,7 @@ const MultiAgentChat: React.FC = () => {
                 )}
                 {msg.sender === 'RecommendationAgent' && !msg.content.includes('🔗 Product Links') && (
                   <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="text-xs font-semibold text-gray-600 mb-2">🛍️ Shop at Frasers Group:</p>
+                    <p className="text-xs font-semibold text-gray-600 mb-2">Shop at Frasers Group:</p>
                     <div className="flex flex-wrap gap-2">
                       {FRASERS_BRANDS.map(brand => (
                         <a

@@ -22,3 +22,8 @@ build/
 .coverage
 htmlcov/
 api.log
+
+# Documentation
+CHANGES.md
+PROJECT_SUMMARY.md
+POLISH_CHECKLIST.md

@@ -1,3 +1,17 @@
+"""
+Retail Odyssey - FastAPI Backend
+
+Multi-agent AI fashion assistant with real-time product recommendations.
+Provides REST API for frontend communication and Prometheus metrics endpoint.
+
+Endpoints:
+- POST /api/chat: Send message to multi-agent system
+- GET /api/history: Retrieve conversation history
+- POST /api/clear: Clear conversation and start new session
+- GET /api/health: Health check
+- GET /metrics: Prometheus metrics for Grafana
+"""
+
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
