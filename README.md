@@ -2,7 +2,7 @@
 
 **AI-Powered Multi-Agent Fashion Assistant with Real-Time Product Recommendations**
 
-**Winner: Best use of AI Agents on Arm** - HackSheffield10 (November 2024)
+**Winner: Best use of AI Agents on Arm** - HackSheffield10 (November 2025)
 
 A sophisticated multi-agent AI system that provides personalized fashion recommendations through collaborative agent intelligence, featuring real product search from Frasers Group stores, real-time monitoring, and ARM-optimized deployment.
 
