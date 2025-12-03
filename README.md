@@ -524,6 +524,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **HackSheffield10** - For hosting an amazing hackathon
 - **HackathonsUK** - For the "Best use of AI Agents on Arm" award
+- - **Reply** - For the multi-agent multi-user challenge
+- **Grafana** - For the doashboard integration challenge
 - **Frasers Group** - For the retail integration challenge
 - **Google** - For Gemini API and AI Studio
 - **Anthropic** - For Claude assistance during development
