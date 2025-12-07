@@ -47,9 +47,9 @@ This project was developed using:
 - Optimized performance on ARM architecture
 
 **Additional Features:**
-- Multi-agent collaboration with context sharing
-- Real-time monitoring via Grafana dashboards
-- Journey-based UX aligned with "Odyssey" theme
+- Multi-agent collaboration with context sharing for Reply Challenge
+- Real-time monitoring via Grafana dashboards for Grafana Challenge
+- Journey-based UX aligned with "Odyssey" theme for HackSheffield10 Challenge
 
 ---
 
@@ -524,7 +524,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **HackSheffield10** - For hosting an amazing hackathon
 - **HackathonsUK** - For the "Best use of AI Agents on Arm" award
-- - **Reply** - For the multi-agent multi-user challenge
+- **Reply** - For the multi-agent multi-user challenge
 - **Grafana** - For the doashboard integration challenge
 - **Frasers Group** - For the retail integration challenge
 - **Google** - For Gemini API and AI Studio
@@ -538,8 +538,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Built at HackSheffield10 (November 29-30, 2024)
 
-**Team:** [Your Team Name]  
-**GitHub:** [Your GitHub Profile]
+**Team:** Retail Odyssey  
+**GitHub:** https://github.com/SkullKrak7/
 
 ---
 
